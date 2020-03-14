@@ -16,16 +16,16 @@ import javax.validation.constraints.NotNull;
  */
 public class Zone {
     
+    private String _id;
+    
     @NotNull(message = "latitude cannot be null")
-    @DecimalMin(value = "0.1", message = "laitude must be greater than 0")
     private double latitude;
     
     @NotNull(message = "longitude cannot be null")
-    @DecimalMin(value = "0.1", message = "longitude must be greater than 0")
     private double longitude;
     
     @NotNull(message = "radius cannot be null")
-    @Min(value = 30, message = "radius must be greater than 30")
+    @Min(value = 10, message = "radius must be greater than 9")
     private int radius;
     
     @NotBlank(message = "name cannot be empty")
@@ -61,6 +61,15 @@ public class Zone {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return _id;
+    }
+
+    public Zone setId(String _id) {
+        this._id = _id;
+        return this;
     }
     
     
