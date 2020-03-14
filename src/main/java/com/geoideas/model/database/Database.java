@@ -11,6 +11,8 @@ import io.reactivex.SingleSource;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.ext.mongo.MongoClient;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -44,7 +46,7 @@ public class Database {
     
     public JsonArray readAllZones() {
         return db.rxFind(DOCUMENT, new JsonObject())
-                .flatMap(zones -> Single.just(new JsonArray(zones)))
+                .map(JsonArray::new)
                 .blockingGet();
                 
     }
