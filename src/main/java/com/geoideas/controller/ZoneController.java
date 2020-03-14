@@ -8,6 +8,8 @@ package com.geoideas.controller;
 
 import com.geoideas.model.database.Database;
 import com.geoideas.model.dto.Zone;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import io.vertx.reactivex.ext.web.handler.BodyHandler;
@@ -36,7 +38,6 @@ public class ZoneController extends Controller {
         router.route("/*").handler(BodyHandler.create());
         router.post("/api/v1/zones")
                 .consumes(APPLICATION_JSON)
-                .produces(APPLICATION_JSON)
                 .blockingHandler(this::create);
         router.get("/api/v1/zones")
                 .produces(APPLICATION_JSON)
@@ -66,7 +67,13 @@ public class ZoneController extends Controller {
     }
     
     private void readAll(RoutingContext ctx) {
-        send(ctx.response(), getDb().readAllZones());
+        var data = getDb().readAllZones();
+        var format = ctx.queryParam("format");
+        if(!format.isEmpty() && format.get(0).equals("geojson"))
+            send(ctx.response(), new GeoJsonUtil().toGeoJson(data));
+        else {
+            send(ctx.response(), data);
+        }
     }
     
     private void delete(RoutingContext ctx) {
